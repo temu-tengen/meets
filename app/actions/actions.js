@@ -128,7 +128,7 @@ export async function getMeetsAction(prevState) {
   try {
     const sql = neon(process.env.DATABASE_URL);
     const meets = await sql`
-      SELECT * FROM meets ORDER BY meetid ASC;`
+      SELECT * FROM meets ORDER BY meetid DESC;`
 
     return meets;
   } catch (error) {

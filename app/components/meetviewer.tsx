@@ -37,7 +37,6 @@ export default function MeetViewer({
       
       <form action={async () => {
         startTransition(async () => {
-          // Passes the exact lowercase ID to the server action
           await voteMeetAction(meetid); 
         });
       }}>

@@ -12,7 +12,7 @@ export default async function DashboardPage() {
   const username = cookieStore.get("username")?.value;
 
   if (!session) {
-    redirect("/login");
+    redirect("/");
   }
 
   return (
@@ -23,6 +23,9 @@ export default async function DashboardPage() {
 
       <ChangePasswordForm></ChangePasswordForm>
 
+      <p>Voting is how many people are coming. Click the vote button to inform others that you are coming. This is not private, your username ({username}) will be publicly available.</p>
+
+      <Link href="/addmeets" className={styles.link}>Add Meets</Link>
       <Link href="/viewmeets" className={styles.link}>View Meets</Link>
     </main>
   );

@@ -4,7 +4,7 @@ import { neon } from "@neondatabase/serverless";
 import { strict } from "assert";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
+import { revalidatePath } from "next/cache";
 
 export async function loginAction(prevState, formData) {
   const username = formData.get("username");
@@ -122,4 +122,43 @@ export async function addMeetAction(prevState, formData) {
   }
 
   return { success: true, message: "Meet added successfully." };
+}
+
+export async function getMeetsAction(prevState) {
+  try {
+    const sql = neon(process.env.DATABASE_URL);
+    const meets = await sql`
+      SELECT * FROM meets ORDER BY meetid ASC;`
+
+    return meets;
+  } catch (error) {
+    return null;
+  }
+
+}
+
+export async function voteMeetAction(meetid) {
+  try {
+    const sql = neon(process.env.DATABASE_URL);
+    
+
+    const meetsList = await sql`
+      SELECT * FROM meets WHERE meetid = ${meetid} LIMIT 1;
+    `;
+
+    if (meetsList.length > 0) {
+      await sql`
+        UPDATE meets
+        SET votes = votes + 1
+        WHERE meetid = ${meetid};
+      `;
+
+      revalidatePath("/viewmeets");
+      return { success: true };
+    }
+    return { success: false, message: "Meet not found" };
+  } catch (error) {
+    console.error("Error voting:", error);
+    return { success: false, message: "Server error" };
+  }
 }

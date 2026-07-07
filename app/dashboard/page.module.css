@@ -7,3 +7,20 @@
     max-height: 30px;
     max-width: 50px;
 }
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 20px;
+
+    
+}
+
+.link {
+    background-color: white;
+    color: black;
+    padding: 5px;
+    border-radius: 10px;
+    max-width: 100px;
+}

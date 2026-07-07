@@ -16,4 +16,6 @@
   justify-content: center;
   font-family: var(--font-geist-sans);
   background-color: var(--background);
+
+  max-width: 100vw;
 }

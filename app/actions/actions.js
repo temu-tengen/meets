@@ -90,7 +90,7 @@ export async function changePassword(prevState, formData) {
   try {
     const cookieStore = await cookies();
     const username = cookieStore.get("username")?.value;
-    
+
     const sql = neon(process.env.DATABASE_URL);
     await sql`
     UPDATE users
@@ -98,9 +98,28 @@ export async function changePassword(prevState, formData) {
     WHERE username = ${username};
   `;
   } catch (error) {
-    return { success: false, message: "pass not changed/error pls try agen later arigatogozaimasu"}
+    return { success: false, message: "pass not changed/error pls try agen later arigatogozaimasu" }
   }
 
-  return { success: true, message: "pass changed"}
+  return { success: true, message: "pass changed" }
 }
 
+export async function addMeetAction(prevState, formData) {
+
+  try {
+    const sql = neon(process.env.DATABASE_URL);
+    const cookieStore = await cookies();
+    const username = cookieStore.get("username")?.value;
+
+    const voters = [];
+    await sql`
+      INSERT INTO meets (title, info, date, votes, voters, owner)
+      VALUES (${formData.get("meetName")}, ${formData.get("meetInfo")}, ${formData.get("meetDate")}, 0, ${voters}, ${username});
+    `;
+  } catch (error) {
+    console.error("Error adding meet:", error);
+    return { success: false, message: "Error adding meet. Please try again later." };
+  }
+
+  return { success: true, message: "Meet added successfully." };
+}

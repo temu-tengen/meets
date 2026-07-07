@@ -3,6 +3,8 @@
 import { useActionState } from "react";
 import { changePassword } from "../actions/actions.js";
 
+import styles from "./changepass.module.css";
+
 interface FormState {
   success: boolean;
   message: string;
@@ -17,11 +19,12 @@ export default function ChangePasswordForm() {
   const [state, formAction, isPending] = useActionState(changePassword, initialState);
 
   return (
-    <div style={{ marginTop: "2rem", padding: "1rem", border: "1px solid #ccc", borderRadius: "8px", maxWidth: "400px" }}>
+    <div className={styles.container}>
       <h3>Change Password</h3>
       
       <form action={formAction} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <input 
+          className={styles.input}
           type="password" 
           name="newPassword" 
           placeholder="Enter new password" 

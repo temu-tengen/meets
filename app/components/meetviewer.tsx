@@ -29,7 +29,7 @@ export default function MeetViewer({
   return (
     <div className={styles.container}>
       <h2>{title}</h2>
-      <p>{info}</p>
+      <p className={styles.paragraph}>{info}</p>
       <p>Votes: {votes}</p>
       <p>Voters: {voterList.join(", ") || "None"}</p>
       <p className={styles.footText}>Owner: {owner}</p>

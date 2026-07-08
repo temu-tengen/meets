@@ -137,19 +137,26 @@ export async function getMeetsAction(prevState) {
 
 }
 
-export async function voteMeetAction(meetid) {
+export async function voteMeetAction(meetid, currentUsername) {
   try {
     const sql = neon(process.env.DATABASE_URL);
-    
 
     const meetsList = await sql`
       SELECT * FROM meets WHERE meetid = ${meetid} LIMIT 1;
     `;
 
     if (meetsList.length > 0) {
+      const currentMeet = meetsList[0];
+      const voters = Array.isArray(currentMeet.voters) ? currentMeet.voters : [];
+
+      if (voters.includes(currentUsername)) {
+        return { success: false, message: "Already voted" };
+      }
+
       await sql`
         UPDATE meets
-        SET votes = votes + 1
+        SET votes = votes + 1,
+            voters = array_append(voters, ${currentUsername})
         WHERE meetid = ${meetid};
       `;
 
@@ -162,3 +169,37 @@ export async function voteMeetAction(meetid) {
     return { success: false, message: "Server error" };
   }
 }
+
+export async function voteReverseMeetAction(meetid, currentUsername) {
+  try {
+    const sql = neon(process.env.DATABASE_URL);
+
+    const meetsList = await sql`
+      SELECT * FROM meets WHERE meetid = ${meetid} LIMIT 1;
+    `;
+
+    if (meetsList.length > 0) {
+      const currentMeet = meetsList[0];
+      const voters = Array.isArray(currentMeet.voters) ? currentMeet.voters : [];
+
+      if (!voters.includes(currentUsername)) {
+        return { success: false, message: "Not voted yet" };
+      }
+
+      await sql`
+        UPDATE meets
+        SET votes = GREATEST(votes - 1, 0),
+            voters = array_remove(voters, ${currentUsername})
+        WHERE meetid = ${meetid};
+      `;
+
+      revalidatePath("/viewmeets");
+      return { success: true };
+    }
+    return { success: false, message: "Meet not found" };
+  } catch (error) {
+    console.error("Error unvoting:", error);
+    return { success: false, message: "Server error" };
+  }
+}
+

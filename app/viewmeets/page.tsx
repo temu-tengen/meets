@@ -32,6 +32,7 @@ export default async function ViewMeetsPage() {
                         owner={meet.owner}
                         votes={meet.votes}
                         voters={meet.voters}
+                        currentUsername={username}
                     />
                 );
             })}

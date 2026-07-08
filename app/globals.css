@@ -37,6 +37,26 @@ body {
   margin: 0;
 }
 
+.pageTitle {
+
+}
+
+.loggedInAs {
+
+}
+
+.container {
+
+}
+
+.header {
+  background-color: rgb(255, 255, 255, 0.05);
+  padding: 20px;
+  margin-bottom: 10px;
+  max-width: 100vm;
+
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

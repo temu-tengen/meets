@@ -38,19 +38,19 @@ body {
 }
 
 .pageTitle {
-
+  padding: 1rem;
 }
 
 .loggedInAs {
-
+  padding: 1rem;
 }
 
 .container {
-
+  background-color: lightslategrey;
 }
 
 .header {
-  background-color: rgb(255, 255, 255, 0.05);
+  background-color: rgb(45, 80, 102);
   padding: 20px;
   margin-bottom: 10px;
   max-width: 100vm;

@@ -29,7 +29,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="container">
+      <body>
         <div className="header">
           <h1 className="siteTitle">PFF Meets</h1>
           {username && (

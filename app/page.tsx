@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export const metadata = {
-  title: "Login",
+  title: "PFF Login",
   description: "PFF Meets Login Page",
 };
 

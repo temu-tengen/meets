@@ -39,6 +39,8 @@ body {
 
 .pageTitle {
   padding: 1rem;
+  margin-bottom: 20px;
+  margin: 20px;
 }
 
 .loggedInAs {
@@ -65,6 +67,11 @@ body {
 
   list-style-type: none;
   text-decoration: none;
+
+  background-image: linear-gradient(rgb(45, 80, 102), white);
+  max-width: 90vw;
+
+  margin: 20px;
 }
 
 .link {
@@ -75,10 +82,10 @@ body {
   border-radius: 10px;
   padding: 10px;
   margin: 10px;
+  
 }
 
 .comingSoonFont {
-  color: white;
   font-family: var(--font-rubik-glitch), sans-serif;
   color: cyan;
   background-color: black;

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { logoutAction } from "../actions/actions";
 import ChangePasswordForm from "../components/changepass";
 import Link from "next/link";
+import LogoutButton from "../components/logoutbutton/logoutbutton";
 
 import styles from "./page.module.css";
 
@@ -19,7 +20,7 @@ export default async function DashboardPage() {
     <main className={styles.container} style={{ padding: "2rem" }}>
       <h1>Dashboard</h1>
       <p>Welcome {username}! This page is secure and only visible to logged-in users.</p>
-      <button className={styles.button} onClick={logoutAction}>Logout</button>
+      <LogoutButton />
 
       <ChangePasswordForm></ChangePasswordForm>
 

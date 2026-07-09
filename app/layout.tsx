@@ -25,7 +25,13 @@ const rubikGlitch = Rubik_Glitch({
 export const metadata: Metadata = {
   title: "Meets",
   description: "PFF Meets",
+
+  icons: {
+    icon: '/icon.png',
+    apple: '/apple-icon.png',
+  }
 };
+
 
 export default function RootLayout({
   children,

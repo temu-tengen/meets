@@ -5,6 +5,8 @@ import ChangePasswordForm from "../components/changepass";
 import Link from "next/link";
 import LogoutButton from "../components/logoutbutton/logoutbutton";
 
+import ChangeEmailForm from "../components/changeemail";
+
 import styles from "./page.module.css";
 
 export default async function DashboardPage() {
@@ -23,6 +25,7 @@ export default async function DashboardPage() {
       <LogoutButton />
 
       <ChangePasswordForm></ChangePasswordForm>
+      <ChangeEmailForm></ChangeEmailForm>
 
       <p>Voting is how many people are coming. Click the vote button to inform others that you are coming. This is not private, your username ({username}) will be publicly available.</p>
 

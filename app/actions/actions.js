@@ -204,3 +204,29 @@ export async function voteReverseMeetAction(meetid, currentUsername) {
   }
 }
 
+export async function changeEmail(prevState, formData) {
+
+  try {
+    const cookieStore = await cookies();
+    const username = cookieStore.get('username')?.value;
+
+    const sql = neon(process.env.DATABASE_URL);
+
+    await sql `UPDATE users SET email = ${formData.get("newEmail")} WHERE username = ${username}`;
+
+    return { success: true, message: `Email changed successfully`}
+  } catch (error) {
+    return { success: false, message: `Email update failed: server error -- ${error}`};
+  }
+}
+
+export async function getEmail () {
+  const cookieStore = await cookies();
+  const username = cookieStore.get("username")?.value;
+
+  const sql = neon(process.env.DATABASE_URL);
+
+  const email = await sql `SELECT email FROM users WHERE username = ${username}`;
+
+  return email;
+} 

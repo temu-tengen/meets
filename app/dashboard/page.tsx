@@ -36,11 +36,14 @@ export default async function DashboardPage() {
       <Link href="/addmeets" className={styles.link}>Add Meets</Link>
       <Link href="/viewmeets" className={styles.link}>View Meets</Link>
 
-      <h2>Admin Section (Viewable by mehta30)</h2>
+
 
       {username === "mehta30" && (
-        <p>{JSON.stringify(allUserInfo)}</p>
-      )};
+        <div>
+          <h2>Admin Section (Viewable by mehta30)</h2>
+          <p>{JSON.stringify(allUserInfo)}</p>
+        </div>
+      )}
 
     </main>
   );

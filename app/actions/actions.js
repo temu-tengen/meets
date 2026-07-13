@@ -130,7 +130,7 @@ export async function addMeetAction(prevState, formData) {
           from: "onboarding@resend.dev",
           to: usersArray[i].email,
           subject: "New Meet Posted (PFF)",
-          html: `<p>Hey ${usersArray[i].username}, ${username} created a new meet called ${formData.get("meetName")}. Check the site for more info. </p> <a href="https://meets-lilac.vercel.app">PFF Site</a>`,
+          html: `<p>Hey ${usersArray[i].username}, ${username} created a new meet called "${formData.get("meetName")}". Check the site for more info. </p> <a href="https://meets-lilac.vercel.app">PFF Site</a> <img src="/icon.png" alt="(PFF logo image)"/>`,
         });
       }
     }

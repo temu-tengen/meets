@@ -117,6 +117,11 @@ export async function addMeetAction(prevState, formData) {
       INSERT INTO meets (title, info, date, votes, voters, owner)
       VALUES (${formData.get("meetName")}, ${formData.get("meetInfo")}, ${formData.get("meetDate")}, 0, ${voters}, ${username});
     `;
+
+    // send email to all users
+    const usersArray = await sql`SELECT * FROM users`;
+
+    console.log(usersArray);
   } catch (error) {
     console.error("Error adding meet:", error);
     return { success: false, message: "Error adding meet. Please try again later." };

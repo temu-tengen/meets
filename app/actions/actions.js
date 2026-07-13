@@ -6,6 +6,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-server-context";
+import { Resend } from "resend";
+
+const resend = new Resend("re_fEZFY52S_F4dQ2Ssy5w48MU46KNCsfUY5");
 
 export async function loginAction(prevState, formData) {
   const username = formData.get("username");
@@ -121,7 +124,16 @@ export async function addMeetAction(prevState, formData) {
     // send email to all users
     const usersArray = await sql`SELECT * FROM users`;
 
-    console.log(usersArray);
+    for (let i = 0; i < usersArray.length; i++) {
+      if (usersArray[i].email) {
+        await resend.emails.send({
+          from: "onboarding@resend.dev",
+          to: usersArray[i].email,
+          subject: "New Meet Posted (PFF)",
+          html: `<p>Hey ${usersArray[i].username}, ${username} created a new meet called ${formData.get("meetName")}. Check the site for more info. </p> <a href="https://meets-lilac.vercel.app">PFF Site</a>`,
+        });
+      }
+    }
   } catch (error) {
     console.error("Error adding meet:", error);
     return { success: false, message: "Error adding meet. Please try again later." };
@@ -217,21 +229,21 @@ export async function changeEmail(prevState, formData) {
 
     const sql = neon(process.env.DATABASE_URL);
 
-    await sql `UPDATE users SET email = ${formData.get("newEmail")} WHERE username = ${username}`;
+    await sql`UPDATE users SET email = ${formData.get("newEmail")} WHERE username = ${username}`;
 
-    return { success: true, message: `Email changed successfully`}
+    return { success: true, message: `Email changed successfully` }
   } catch (error) {
-    return { success: false, message: `Email update failed: server error -- ${error}`};
+    return { success: false, message: `Email update failed: server error -- ${error}` };
   }
 }
 
-export async function getEmail () {
+export async function getEmail() {
   const cookieStore = await cookies();
   const username = cookieStore.get("username")?.value;
 
   const sql = neon(process.env.DATABASE_URL);
 
-  const email = await sql `SELECT email FROM users WHERE username = ${username}`;
+  const email = await sql`SELECT email FROM users WHERE username = ${username}`;
 
   return email;
 } 

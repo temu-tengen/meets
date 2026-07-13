@@ -38,7 +38,7 @@ export default async function DashboardPage() {
 
       <h2>Admin Section (Viewable by mehta30)</h2>
 
-      {username && (
+      {username === "mehta30" && (
         <p>{JSON.stringify(allUserInfo)}</p>
       )};
 

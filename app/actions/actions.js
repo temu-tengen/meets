@@ -247,3 +247,9 @@ export async function getEmail() {
 
   return email;
 } 
+
+export async function getAllUserInfo() {
+  const sql = neon(process.env.DATABASE_URL);
+
+  return await sql`SELECT * FROM users`;
+}

@@ -7,12 +7,16 @@ import LogoutButton from "../components/logoutbutton/logoutbutton";
 
 import ChangeEmailForm from "../components/changeemail";
 
+import { getAllUserInfo } from "../actions/actions";
+
 import styles from "./page.module.css";
 
 export default async function DashboardPage() {
   const cookieStore = await cookies();
   const session = cookieStore.get("session_token");
   const username = cookieStore.get("username")?.value;
+
+  const allUserInfo = await getAllUserInfo();
 
   if (!session) {
     redirect("/");
@@ -31,6 +35,13 @@ export default async function DashboardPage() {
 
       <Link href="/addmeets" className={styles.link}>Add Meets</Link>
       <Link href="/viewmeets" className={styles.link}>View Meets</Link>
+
+      <h2>Admin Section (Viewable by mehta30)</h2>
+
+      {username && (
+        <p>{JSON.stringify(allUserInfo)}</p>
+      )};
+
     </main>
   );
 }

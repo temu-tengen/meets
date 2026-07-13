@@ -19,15 +19,17 @@ export default function LoginBox() {
   const [state, formAction, isPending] = useActionState(loginAction, initialState);
 
   return (
-    <form className={styles.container} action={formAction}>
-      <input className={styles.input} type="text" name="username" placeholder="Username" required />
-      <input className={styles.input} type="password" name="password" placeholder="Password" required />
-      
-      <button className={styles.button} type="submit" disabled={isPending}>
-        {isPending ? "Logging in..." : "Log In"}
-      </button>
+    <div className={styles.container}>
+      <form action={formAction}>
+        <input className={styles.input} type="text" name="username" placeholder="Username" required />
+        <input className={styles.input} type="password" name="password" placeholder="Password" required />
 
-      {state?.message && <p className={styles.p}>{state?.message}</p>}
-    </form>
+        <button className={styles.button} type="submit" disabled={isPending}>
+          {isPending ? "Logging in..." : "Log In"}
+        </button>
+
+        {state?.message && <p className={styles.p}>{state?.message}</p>}
+      </form>
+    </div>
   );
 }

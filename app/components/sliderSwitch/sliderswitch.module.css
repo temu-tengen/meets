@@ -1,0 +1,43 @@
+.sliderSwitchContainerA {
+    background-color: lightgreen;
+    border-radius: 20px;
+    width: 60px;
+
+    padding: 4px;
+    margin: 20px;
+
+    display: flex;
+    align-items: left;
+}
+
+.sliderSwitchContainerB {
+    background-color: lightcoral;
+    border-radius: 20px;
+    width: 60px;
+
+    padding: 4px;
+    margin: 20px;
+
+    display: flex;
+    align-items: right;
+}
+
+.sliderSwitchOn {
+    background-color: black;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-left: auto;
+    margin-right: 0px;
+}
+
+.sliderSwitchOff {
+    background-color: black;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+
+    transition: margin-right 0.2s ease-in-out;
+}

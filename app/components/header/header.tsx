@@ -18,8 +18,8 @@ export default function Header() {
         <li>
           <button className="link" onClick={() => {  router.push("/addmeets"); }}>Add Meet</button>
         </li>
-        <li className="link">
-          <button className="comingSoonFont" onClick={() => {  router.push("/anchat"); }}>Anchat (Coming Soon)</button>
+        <li>
+          <button className="link" onClick={() => {  router.push("/anchat"); }}>Anchat (Coming Soon)</button>
         </li>
       </ul>
     </div>

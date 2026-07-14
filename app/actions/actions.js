@@ -8,6 +8,8 @@ import { revalidatePath } from "next/cache";
 import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-server-context";
 import { Resend } from "resend";
 
+import nodemailer from "nodemailer";
+
 const resend = new Resend("re_fEZFY52S_F4dQ2Ssy5w48MU46KNCsfUY5");
 
 export async function loginAction(prevState, formData) {
@@ -121,19 +123,33 @@ export async function addMeetAction(prevState, formData) {
       VALUES (${formData.get("meetName")}, ${formData.get("meetInfo")}, ${formData.get("meetDate")}, 0, ${voters}, ${username});
     `;
 
-    // send email to all users
     const usersArray = await sql`SELECT * FROM users`;
 
-    for (let i = 0; i < usersArray.length; i++) {
-      if (usersArray[i].email) {
-        await resend.emails.send({
-          from: "onboarding@resend.dev",
-          to: usersArray[i].email,
-          subject: "New Meet Posted (PFF)",
-          html: `<p>Hey ${usersArray[i].username}, ${username} created a new meet called "${formData.get("meetName")}". Check the site for more info. </p> <a href="https://meets-lilac.vercel.app">PFF Site</a> <img src="/icon.png" alt="(PFF logo image)"/>`,
-        });
-      }
-    }
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: parseInt('587'),
+      secure: false,
+      auth: {
+        user: "shalin.mehta2015@gmail.com",
+        pass: "owqw wjmc xshn cecv",
+      },
+    });
+
+    const usersWithEmail = usersArray.filter(user => user.email);
+
+    const emailPromises = usersWithEmail.map(user => {
+      return transporter.sendMail({
+        from: `"PFF Meets" <shalin.mehta2015@gmail.com>`,
+        to: user.email,
+        subject: `New Meet ${formData.get("meetName")} Added to PFF`,
+        text: `"${formData.get("meetName")}" has been added to the list of meets by ${username}. Check it out at https://meets-lilac.vercel.app/viewmeets`,
+      })
+        .then(info => console.log(`Email successfully sent to ${user.email}`))
+        .catch(err => console.error(`Failed to send email to ${user.email}:`, err));
+    });
+
+    await Promise.all(emailPromises);
+
   } catch (error) {
     console.error("Error adding meet:", error);
     return { success: false, message: "Error adding meet. Please try again later." };
@@ -246,7 +262,7 @@ export async function getEmail() {
   const email = await sql`SELECT email FROM users WHERE username = ${username}`;
 
   return email;
-} 
+}
 
 export async function getAllUserInfo() {
   const sql = neon(process.env.DATABASE_URL);

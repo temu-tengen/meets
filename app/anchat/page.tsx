@@ -1,6 +1,7 @@
 
 import SliderSwitch from "../components/sliderSwitch/sliderswitch";
 import styles from "./page.module.css";
+import ChatRoom from "../components/chatroom/chatroom";
 
 export default function AnchatPage() {
 
@@ -11,6 +12,9 @@ export default function AnchatPage() {
             <p className={styles.p}>Monday, July 13 2026</p>
             <p className={styles.p}>Thanks!</p>
             <SliderSwitch />
+
+            <ChatRoom></ChatRoom>
+            
         </div>
     );
 }

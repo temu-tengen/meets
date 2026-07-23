@@ -1,4 +1,4 @@
-import { pusherServer } from './lib/pusherServer';
+import { pusherServer } from '../anchat/lib/pusherServer';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {

@@ -13,40 +13,59 @@ export default function ChatRoom() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [username, setUsername] = useState('Anonymous');
+  const [status, setStatus] = useState('');
 
   useEffect(() => {
-    // Initialize Pusher Client
-    const pusher = new PusherClient(process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
-      cluster: process.env.PUSHER_APP_CLUSTER!,
-    });
+    const pusherKey = process.env.NEXT_PUBLIC_PUSHER_APP_KEY;
+    const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER ?? process.env.PUSHER_APP_CLUSTER;
 
-    // Subscribe to the channel
-    const channel = pusher.subscribe('chat-room');
+    if (!pusherKey || !pusherCluster) {
+      setStatus('Chat is unavailable until the Pusher credentials are configured.');
+      return;
+    }
 
-    // Bind to the event triggered by our server API
-    channel.bind('upcoming-message', (data: Message) => {
-      setMessages((prev) => [...prev, data]);
-    });
+    try {
+      const pusher = new PusherClient(pusherKey, {
+        cluster: pusherCluster,
+      });
 
-    // Cleanup subscription on unmount
-    return () => {
-      channel.unbind_all();
-      channel.unsubscribe();
-    };
+      const channel = pusher.subscribe('chat-room');
+      channel.bind('upcoming-message', (data: Message) => {
+        setMessages((prev) => [...prev, data]);
+      });
+
+      return () => {
+        channel.unbind_all();
+        channel.unsubscribe();
+      };
+    } catch (error) {
+      console.error('Unable to initialize chat', error);
+      setStatus('Chat could not be started. Please check the Pusher configuration.');
+    }
   }, []);
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    // Send the message payload to our API route handler
-    await fetch('/api/message', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/center' },
-      body: JSON.stringify({ text: input, username }),
-    });
+    if (!process.env.NEXT_PUBLIC_PUSHER_APP_KEY || !process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER) {
+      setStatus('Chat is unavailable until the Pusher credentials are configured.');
+      return;
+    }
 
-    setInput('');
+    try {
+      await fetch('/api', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: input, username }),
+      });
+
+      setInput('');
+      setStatus('');
+    } catch (error) {
+      console.error('Unable to send message', error);
+      setStatus('The message could not be sent right now.');
+    }
   };
 
   return (
@@ -58,20 +77,22 @@ export default function ChatRoom() {
           </div>
         ))}
       </div>
-      
+
+      {status ? <p style={{ color: '#b91c1c', marginTop: '8px' }}>{status}</p> : null}
+
       <form onSubmit={sendMessage} style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
-        <input 
-          type="text" 
-          placeholder="Your Name" 
-          value={username} 
-          onChange={(e) => setUsername(e.target.value)} 
+        <input
+          type="text"
+          placeholder="Your Name"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           style={{ width: '25%', padding: '5px' }}
         />
-        <input 
-          type="text" 
-          placeholder="Type a message..." 
-          value={input} 
-          onChange={(e) => setInput(e.target.value)} 
+        <input
+          type="text"
+          placeholder="Type a message..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
           style={{ flexGrow: 1, padding: '5px' }}
         />
         <button type="submit" style={{ padding: '5px 15px' }}>Send</button>

@@ -1,3 +1,4 @@
+'use client';
 
 import SliderSwitch from "../components/sliderSwitch/sliderswitch";
 import styles from "./page.module.css";
